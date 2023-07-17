@@ -15,14 +15,19 @@
       margin: 20px;
     }
 
+    .pc-container {
+      position: relative;  /* Make the container positioned relative */
+      flex-basis: 200px;  /* Set the initial size */
+      margin: 10px;
+    }
+
     .pc {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 200px;
+      width: 200%;
       height: 150px;
-      margin: 10px;
       border: 1px solid #ccc;
       background-color: #f7f7f7;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -54,10 +59,16 @@
 
     .system-info {
       display: none;
-      margin-top: 10px;
+      position: absolute;  /* Position the menu absolutely */
+      width: 100%;  /* Make the menu as wide as the container */
+      top: 160px;  /* Position the menu under the PC */
+      left: 0;
       padding: 10px;
       border: 1px solid #ccc;
       background-color: #fff;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      z-index: 1;  /* Make sure the menu overlays the other PCs */
     }
 
     .system-info h3 {
@@ -68,6 +79,7 @@
     .system-info table {
       width: 100%;
       border-collapse: collapse;
+      background-color: #f7f7f7;
     }
 
     .system-info th,
@@ -78,7 +90,7 @@
     }
 
     @media screen and (max-width: 600px) {
-      .pc {
+      .pc-container {
         width: 100%;
       }
     }
@@ -132,6 +144,7 @@
         clientInfo.querySelector('p').textContent = 'Status: Offline';
       }
 
+
       var systemInfo = clientInfo.querySelector('.system-info');
       if (systemInfo) {
         clientInfo.removeChild(systemInfo);
@@ -146,18 +159,29 @@
       systemInfo.appendChild(systemInfoTitle);
 
       var table = document.createElement('table');
-      var tableHead = document.createElement('thead');
       var tableBody = document.createElement('tbody');
 
-      for (var key in data) {
-        if (key === 'online') continue;
+      var allData = {...data, ...data.system_info};
+      for (var key in allData) {
+        if (key === 'online' || key === 'system_info') continue;
 
         var row = document.createElement('tr');
         var attributeCell = document.createElement('td');
         var valueCell = document.createElement('td');
 
         attributeCell.textContent = key;
-        valueCell.textContent = data[key];
+        if (typeof allData[key] === 'object' && allData[key] !== null) {
+          valueCell.textContent = '';
+          for (var subKey in allData[key]) {
+            var subValue = allData[key][subKey];
+            if (subKey === 'physical_memory_installed' || subKey === 'ssd_storage') {
+              subValue = parseFloat(subValue).toFixed(2);
+            }
+            valueCell.textContent += subKey + ': ' + subValue + ', ';
+          }
+        } else {
+          valueCell.textContent = allData[key];
+        }
 
         row.appendChild(attributeCell);
         row.appendChild(valueCell);
@@ -165,7 +189,6 @@
         tableBody.appendChild(row);
       }
 
-      table.appendChild(tableHead);
       table.appendChild(tableBody);
       systemInfo.appendChild(table);
 
@@ -183,7 +206,7 @@
           }
         });
     }, 5000);
-  </script>
+</script>
 </head>
 <body>
   <div class="container">
