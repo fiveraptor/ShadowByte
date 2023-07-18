@@ -144,15 +144,16 @@
         clientInfo.querySelector('p').textContent = 'Status: Offline';
       }
 
-
       var systemInfo = clientInfo.querySelector('.system-info');
-      if (systemInfo) {
-        clientInfo.removeChild(systemInfo);
+      if (!systemInfo) {
+        systemInfo = document.createElement('div');
+        systemInfo.classList.add('system-info');
+        systemInfo.id = clientId + "-info";
+      } else {
+        while (systemInfo.firstChild) {
+          systemInfo.firstChild.remove();
+        }
       }
-
-      systemInfo = document.createElement('div');
-      systemInfo.classList.add('system-info');
-      systemInfo.id = clientId + "-info";
 
       var systemInfoTitle = document.createElement('h3');
       systemInfoTitle.textContent = clientId + ' Systeminformationen';
@@ -196,6 +197,15 @@
     }
 
     setInterval(function() {
+      var openSystemInfoId = null;
+      var allPcInfo = document.getElementsByClassName("system-info");
+      for (var i = 0; i < allPcInfo.length; i++) {
+        if (allPcInfo[i].style.display !== "none") {
+          openSystemInfoId = allPcInfo[i].id;
+          break;
+        }
+      }
+
       fetch('/info')
         .then(function(response) {
           return response.json();
@@ -204,9 +214,13 @@
           for (var clientId in data) {
             updateSystemInfo(data[clientId], clientId);
           }
+
+          if (openSystemInfoId) {
+            document.getElementById(openSystemInfoId).style.display = "block";
+          }
         });
     }, 5000);
-</script>
+  </script>
 </head>
 <body>
   <div class="container">
