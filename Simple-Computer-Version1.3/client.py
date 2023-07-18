@@ -36,9 +36,9 @@ def send_system_info():
         "system_model": platform.uname().machine,
         "system_type": platform.uname().processor,
         "processor": get_cpu_info()['brand_raw'],
-        "bios_version_date": "American Megatrends International, LLC. F1, 24.05.2021",  # Replace this with your method to get BIOS info
-        "smbios_version": "3.3",  # Replace this with your method to get SMBIOS version
-        "bios_mode": "UEFI",  # Replace this with your method to get BIOS mode
+        "bios_version_date": "TBD",  # Replace this with your method to get BIOS info
+        "smbios_version": "TBD",  # Replace this with your method to get SMBIOS version
+        "bios_mode": "TBD",  # Replace this with your method to get BIOS mode
         "username": getpass.getuser(),
         "physical_memory_installed": bytes_to_gb(psutil.virtual_memory().total),
         "ssd_storage": bytes_to_gb(psutil.disk_usage('/').total),
