@@ -12,7 +12,7 @@ def bytes_to_gb(bytes_value):
     return round(bytes_value / (1024 ** 3), 2)
 
 def send_status_update(status):
-    server_url = "http://116.203.46.145:5000/update_status/" + status
+    server_url = "http://localhost:5000/update_status/" + status
     try:
         response = requests.get(server_url)
         if response.status_code == 200:
@@ -24,7 +24,7 @@ def send_status_update(status):
 
 def send_system_info():
     client_id = socket.gethostname()  # Replace with your client ID
-    server_url = "http://116.203.46.145:5000/info"
+    server_url = "http://localhost:5000/info"
     cpu_percent = psutil.cpu_percent()
     virtual_memory = psutil.virtual_memory().percent
     disk_usage = psutil.disk_usage('/').percent
