@@ -39,7 +39,7 @@
                             <% } %>
                         </td>
                         <td><%= new Date(client.last_online).toLocaleString('de-CH', { 
-                            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', 
+                            weekday: 'short' year: 'numeric', month: 'short', day: 'numeric', 
                             hour: '2-digit', minute: '2-digit' }) %></td>
                         <td>
                             <a href="/client/<%= client.id %>" class="detail-btn">Details</a>
