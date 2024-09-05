@@ -1,6 +1,15 @@
 const express = require('express');
 const mysql = require('mysql');
 const path = require('path');
+const https = require('https');
+const fs = require('fs');
+
+// SSL-Zertifikat laden (selbstsigniert)
+const sslOptions = {
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.cert')
+};
+
 const app = express();
 
 // MySQL-Datenbankverbindung
@@ -15,8 +24,8 @@ const db = mysql.createConnection({
 db.connect((err) => {
     if (err) throw err;
     console.log('Connected to database');
-  });
-  
+});
+
 // Setze den Ordner für statische Dateien (CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -91,9 +100,7 @@ app.get('/client/:client_id/wifi', (req, res) => {
   });
 });
 
-
-
-// Server starten
-app.listen(3000, () => {
-  console.log('Server läuft auf http://localhost:3000');
+// HTTPS Server starten
+https.createServer(sslOptions, app).listen(3000, () => {
+  console.log('Server läuft auf https://localhost:3000');
 });
