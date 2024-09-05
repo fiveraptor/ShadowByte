@@ -23,20 +23,48 @@
                     <td><%= clientInfo.operating_system %></td>
                 </tr>
                 <tr>
-                    <td><strong>CPU Auslastung</strong></td>
-                    <td><%= clientInfo.cpu_percent %>%</td>
+                    <td><strong>Windows Version</strong></td>
+                    <td><%= clientInfo.windows_version %></td>
                 </tr>
                 <tr>
-                    <td><strong>Speicher Auslastung</strong></td>
-                    <td><%= clientInfo.virtual_memory %>%</td>
+                    <td><strong>System Name</strong></td>
+                    <td><%= clientInfo.system_name %></td>
                 </tr>
                 <tr>
-                    <td><strong>Festplattennutzung</strong></td>
-                    <td><%= clientInfo.disk_usage %>%</td>
+                    <td><strong>System Vendor</strong></td>
+                    <td><%= clientInfo.system_vendor %></td>
+                </tr>
+                <tr>
+                    <td><strong>System Model</strong></td>
+                    <td><%= clientInfo.system_model %></td>
+                </tr>
+                <tr>
+                    <td><strong>System Type</strong></td>
+                    <td><%= clientInfo.system_type %></td>
                 </tr>
                 <tr>
                     <td><strong>Prozessor</strong></td>
                     <td><%= clientInfo.processor %></td>
+                </tr>
+                <tr>
+                    <td><strong>BIOS Version</strong></td>
+                    <td><%= clientInfo.bios_version %></td>
+                </tr>
+                <tr>
+                    <td><strong>BIOS Mode</strong></td>
+                    <td><%= clientInfo.bios_mode %></td>
+                </tr>
+                <tr>
+                    <td><strong>CPU Auslastung</strong></td>
+                    <td><%= clientInfo.cpu_percent %>%</td>
+                </tr>
+                <tr>
+                    <td><strong>Virtueller Speicher</strong></td>
+                    <td><%= clientInfo.virtual_memory %>%</td>
+                </tr>
+                <tr>
+                    <td><strong>Festplattennutzung</strong></td>
+                    <td><%= clientInfo.disk_usage %> GB</td>
                 </tr>
                 <tr>
                     <td><strong>Physischer Speicher</strong></td>
@@ -49,6 +77,10 @@
                 <tr>
                     <td><strong>Benutzername</strong></td>
                     <td><%= clientInfo.username %></td>
+                </tr>
+                <tr>
+                    <td><strong>Aufgezeichnet am</strong></td>
+                    <td><%= clientInfo.recorded_at %></td>
                 </tr>
             </tbody>
         </table>
