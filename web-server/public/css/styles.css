@@ -65,8 +65,11 @@ h1 {
     color: white;
 }
 
-/* Detail Button */
-.detail-btn {
+
+
+
+/* Styling for Details and WLAN buttons */
+.detail-btn, .wifi-btn {
     display: inline-block;
     padding: 8px 16px;
     background-color: #0066cc;
@@ -75,11 +78,16 @@ h1 {
     border-radius: 5px;
     transition: background-color 0.3s;
     text-align: center;
+    margin-right: 10px; /* Space between buttons */
 }
 
-.detail-btn:hover {
+.detail-btn:hover, .wifi-btn:hover {
     background-color: #004a99;
 }
+
+
+
+
 
 /* Tabelle für Client-Details */
 .client-table {
@@ -133,4 +141,42 @@ h1 {
 
 .delete-btn:hover {
     background-color: #d32f2f;
+}
+
+/* Styling for the Copy buttons with icons */
+.copy-btn {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    overflow: hidden; /* Ensures ripple stays inside the button */
+    vertical-align: middle;
+}
+
+.copy-icon {
+    width: 16px; /* Adjust icon size */
+    height: 16px;
+}
+
+/* Popup message for "Copied!" */
+.copy-popup {
+    visibility: hidden;
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px;
+    position: fixed;
+    bottom: 50px; /* Positioned at the bottom */
+    left: 50%;
+    transform: translateX(-50%); /* Center it horizontally */
+    z-index: 1000; /* Ensure it's above other content */
+    transition: visibility 0s, opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.copy-popup.show {
+    visibility: visible;
+    opacity: 1;
 }

@@ -74,6 +74,24 @@ app.get('/client/:client_id', (req, res) => {
   });
 });
 
+// Route to fetch WiFi information for a specific client and display the hostname
+app.get('/client/:client_id/wifi', (req, res) => {
+  let sql = `SELECT wifi_info.ssid, wifi_info.password, clients.hostname 
+             FROM wifi_info 
+             JOIN clients ON wifi_info.client_id = clients.id 
+             WHERE wifi_info.client_id = ${req.params.client_id}`;
+  
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    
+    // If WiFi info is found, pass it and the hostname to the view
+    const hostname = result.length > 0 ? result[0].hostname : 'Unbekannt';
+    res.render('wifi_details', { wifiInfo: result, clientHostname: hostname });
+  });
+});
+
+
+
 // Server starten
 app.listen(3000, () => {
   console.log('Server läuft auf http://localhost:3000');

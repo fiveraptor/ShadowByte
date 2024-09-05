@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShadowByte - WLAN Details</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        // Function to copy text to clipboard and show popup feedback
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyPopup();
+            }).catch(err => {
+                console.error('Kopieren fehlgeschlagen: ', err);
+            });
+        }
+
+        // Function to show "Copied!" popup
+        function showCopyPopup() {
+            const popup = document.getElementById('copy-popup');
+            popup.classList.add('show'); // Show the popup
+            setTimeout(() => {
+                popup.classList.remove('show'); // Hide it after 1.5 seconds
+            }, 1500);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>WLAN-Informationen: <%= clientHostname %></h1>
+        
+        <!-- Copy popup message -->
+        <div id="copy-popup" class="copy-popup">Copied!</div>
+
+        <table class="client-table">
+            <thead>
+                <tr>
+                    <th>SSID</th>
+                    <th>Passwort</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (wifiInfo.length > 0) { %>
+                    <% wifiInfo.forEach(wifi => { %>
+                        <tr>
+                            <td>
+                                <%= wifi.ssid %>
+                                <button onclick="copyToClipboard('<%= wifi.ssid %>')" class="copy-btn">
+                                    <img src="/img/copy-icon.svg" alt="Copy" class="copy-icon">
+                                </button>
+                            </td>
+                            <td>
+                                <%= wifi.password ? wifi.password : 'Kein Passwort' %>
+                                <% if (wifi.password) { %>
+                                    <button onclick="copyToClipboard('<%= wifi.password %>')" class="copy-btn">
+                                        <img src="/img/copy-icon.svg" alt="Copy" class="copy-icon">
+                                    </button>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="3">Keine WLAN-Daten gefunden.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+
+        <a href="/" class="back-link">Zurück</a>
+    </div>
+</body>
+</html>

@@ -41,8 +41,12 @@
                         <td><%= new Date(client.last_online).toLocaleString('en-GB', { 
                             weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', 
                             hour: '2-digit', minute: '2-digit' }) %></td>
-                        <td><a href="/client/<%= client.id %>" class="detail-btn">Details</a></td>
                         <td>
+                            <a href="/client/<%= client.id %>" class="detail-btn">Details</a>
+                        </td>
+                        <td>
+                            <!-- "WLANs anzeigen"-Button -->
+                            <a href="/client/<%= client.id %>/wifi" class="wifi-btn">WLAN Info</a>
                             <!-- Löschen-Button -->
                             <button onclick="confirmDelete(<%= client.id %>)" class="delete-btn">Löschen</button>
                         </td>
