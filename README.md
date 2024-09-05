@@ -1,7 +1,7 @@
 # ShadowByte System Monitoring
 ShadowByte is a system monitoring tool that allows collecting system information from clients and displaying it on a central server. Additionally, the tool stores Wi-Fi information (SSID and password) from the clients and shows the online/offline status.
 
-## Funktionen
+## Features
 - System Information Collection: CPU usage, disk usage, operating system, memory information, and other client system data are collected at regular intervals.
 - Wi-Fi Information Collection: Retrieves stored Wi-Fi SSIDs and passwords from clients and displays them on the server.
 - Online/Offline Status: The online status of clients is automatically updated based on their last activity.
