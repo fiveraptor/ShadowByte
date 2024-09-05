@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Liste</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Liste aller Clients</h1>
+        <table class="client-table">
+            <thead>
+                <tr>
+                    <th>Client Name</th>
+                    <th>Status</th>
+                    <th>Zuletzt online</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% clients.forEach(client => { %>
+                    <tr>
+                        <td>
+                            <%= client.hostname %>
+                        </td>
+                        <td>
+                            <% if (client.online_status) { %>
+                                <span class="status online">Online</span>
+                            <% } else { %>
+                                <span class="status offline">Offline</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <%= client.last_online ? client.last_online : 'Nie' %>
+                        </td>
+                        <td>
+                            <a href="/client/<%= client.id %>" class="detail-btn">Details</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

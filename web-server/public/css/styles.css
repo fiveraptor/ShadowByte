@@ -1,0 +1,82 @@
+/* Globales Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    width: 100%;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Tabelle für Clients */
+.client-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.client-table th, .client-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.client-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.client-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Status */
+.status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status.online {
+    background-color: #4caf50;
+    color: white;
+}
+
+.status.offline {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Detail Button */
+.detail-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #0066cc;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.detail-btn:hover {
+    background-color: #004a99;
+}

@@ -22,9 +22,9 @@ def get_or_create_client(connection, client_id, hostname):
         return result[0]  # Client ID zurückgeben
     
     # Wenn der Client nicht existiert, füge ihn hinzu
-    add_client = ("INSERT INTO clients (client_id, hostname) "
-                  "VALUES (%s, %s)")
-    cursor.execute(add_client, (client_id, hostname))
+    add_client = ("INSERT INTO clients (client_id, hostname, online_status, last_online) "
+                  "VALUES (%s, %s, %s, CURRENT_TIMESTAMP)")
+    cursor.execute(add_client, (client_id, hostname, True))  # Online setzen, wenn der Client erstellt wird
     connection.commit()
     
     return cursor.lastrowid  # ID des neuen Clients zurückgeben
@@ -32,7 +32,7 @@ def get_or_create_client(connection, client_id, hostname):
 def update_system_info(connection, client_db_id, system_info):
     cursor = connection.cursor()
 
-    # SQL-Abfrage zum Aktualisieren der bestehenden Systeminformationen
+    # SQL-Abfrage zum Aktualisieren der bestehenden Systeminformationen und des Online-Status
     update_system_info = ("""
         INSERT INTO system_info (
             client_id, cpu_percent, virtual_memory, disk_usage, operating_system, 
@@ -60,6 +60,14 @@ def update_system_info(connection, client_db_id, system_info):
             recorded_at = CURRENT_TIMESTAMP;
     """)
 
+    # Aktualisieren des Online-Status und des letzten Online-Zeitpunkts in der Clients-Tabelle
+    update_client_status = ("""
+        UPDATE clients
+        SET online_status = %s, last_online = CURRENT_TIMESTAMP
+        WHERE id = %s;
+    """)
+
+    # Daten für die Systeminformationen
     data_system_info = (
         client_db_id,
         system_info['cpu_percent'],
@@ -79,12 +87,15 @@ def update_system_info(connection, client_db_id, system_info):
         system_info['system_info']['physical_memory_installed'],
         system_info['system_info']['ssd_storage']
     )
-    
+
+    # Update-Queries ausführen
     cursor.execute(update_system_info, data_system_info)
+    cursor.execute(update_client_status, (True, client_db_id))  # Online setzen und den letzten Online-Zeitpunkt aktualisieren
+
     connection.commit()
     cursor.close()
 
-    print("System info successfully updated in database for client ID:", client_db_id)
+    print("System info and client status successfully updated in database for client ID:", client_db_id)
 
 def send_system_info():
     # Verbinde mit der Datenbank

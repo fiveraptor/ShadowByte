@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Informationen</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Informationen für Client <%= clientInfo.system_name %></h1>
+        <div class="client-info">
+            <p><strong>Betriebssystem:</strong> <%= clientInfo.operating_system %></p>
+            <p><strong>CPU Auslastung:</strong> <%= clientInfo.cpu_percent %>%</p>
+            <p><strong>Speicher Auslastung:</strong> <%= clientInfo.virtual_memory %>%</p>
+            <p><strong>Festplattennutzung:</strong> <%= clientInfo.disk_usage %>%</p>
+            <p><strong>Prozessor:</strong> <%= clientInfo.processor %></p>
+            <p><strong>Physischer Speicher:</strong> <%= clientInfo.physical_memory_installed %> GB</p>
+            <p><strong>SSD Speicher:</strong> <%= clientInfo.ssd_storage %> GB</p>
+            <p><strong>Benutzername:</strong> <%= clientInfo.username %></p>
+        </div>
+        <a href="/" class="back-link">Zurück zur Liste</a>
+    </div>
+</body>
+</html>
