@@ -79,7 +79,6 @@ app.get('/client/:client_id', (req, res) => {
   let sql = `SELECT * FROM system_info WHERE client_id = ${req.params.client_id}`;
   db.query(sql, (err, result) => {
     if (err) throw err;
-    console.log(result[0]); // Prüfe, ob alle Daten richtig geladen werden
     res.render('client_details', { clientInfo: result[0] });
   });
 });
