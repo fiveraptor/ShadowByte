@@ -12,17 +12,17 @@ connection = mysql.connector.connect(
 
 # Funktion, um die SSID und Passwörter der gespeicherten WLAN-Netzwerke zu erhalten
 def get_wifi_info():
-    # Kommando zum Abrufen aller gespeicherten WLAN-Profile (für macOS)
-    command = ["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", "--getinfo"]
+    # Kommando zum Abrufen der aktuellen SSID (für macOS)
+    command = ["/usr/sbin/networksetup", "-getairportnetwork", "en0"]
     try:
         result = subprocess.run(command, capture_output=True, text=True).stdout
-        print(f"Ergebnisse von 'airport --getinfo':\n{result}")
+        print(f"Ergebnisse von 'networksetup -getairportnetwork en0':\n{result}")
     except Exception as e:
         print(f"Fehler beim Ausführen des Befehls: {e}")
         return []
 
     # SSID extrahieren
-    ssid_match = re.search(r"^\s*SSID:\s*(.*)", result, re.MULTILINE)
+    ssid_match = re.search(r"^Current\s+Wi-Fi\s+Network:\s*(.*)$", result, re.MULTILINE)
     ssid = ssid_match.group(1) if ssid_match else None
 
     wifi_data = []
