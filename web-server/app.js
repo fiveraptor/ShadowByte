@@ -8,7 +8,8 @@ const db = mysql.createConnection({
   host: '192.168.1.71',
   user: 'ShadowByte',
   password: 'ShadowByte',
-  database: 'system_info_db'
+  database: 'system_info_db',
+  timezone: '+02:00' // Hier wird die Zeitzone auf +2 gesetzt
 });
 
 db.connect((err) => {
