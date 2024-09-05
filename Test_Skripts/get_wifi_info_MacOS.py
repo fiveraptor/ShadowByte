@@ -15,14 +15,15 @@ def get_wifi_info():
     # Kommando zum Abrufen aller gespeicherten WLAN-Passwörter (erfordert sudo)
     command = ["security", "find-generic-password", "-D", "AirPort network password", "-a", "WLAN", "-g"]
     try:
-        result = subprocess.run(command, capture_output=True, text=True, stderr=subprocess.PIPE).stderr
-        print(f"Ergebnisse von 'security find-generic-password':\n{result}")
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        output = result.stderr  # Das Passwort wird in stderr ausgegeben
+        print(f"Ergebnisse von 'security find-generic-password':\n{output}")
     except Exception as e:
         print(f"Fehler beim Ausführen des Befehls: {e}")
         return []
 
     # Alle SSIDs (Netzwerknamen) extrahieren
-    ssids = re.findall(r"acct=\"(.*?)\"", result)
+    ssids = re.findall(r"acct=\"(.*?)\"", output)
     wifi_data = []
 
     # Für jede SSID das zugehörige Passwort abrufen
@@ -30,8 +31,9 @@ def get_wifi_info():
         command = ["security", "find-generic-password", "-D", "AirPort network password", "-a", ssid, "-g"]
         try:
             # Hier wird das Passwort mit "security" aus dem Schlüsselbund extrahiert
-            password_result = subprocess.run(command, capture_output=True, text=True, stderr=subprocess.PIPE).stderr
-            password_match = re.search(r"password: \"(.*?)\"", password_result)
+            password_result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            password_output = password_result.stderr
+            password_match = re.search(r"password: \"(.*?)\"", password_output)
             password = password_match.group(1) if password_match else None
             print(f"Passwort für '{ssid}' gefunden: {password}")
         except Exception as e:
