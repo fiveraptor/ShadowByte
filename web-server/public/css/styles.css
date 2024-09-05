@@ -65,50 +65,18 @@ h1 {
     color: white;
 }
 
-
-
-
-/* Styling for Details and WLAN buttons */
-.detail-btn, .wifi-btn {
+/* Unified Button Styling */
+button, .detail-btn, .wifi-btn, .delete-btn {
     display: inline-block;
-    padding: 8px 16px;
-    background-color: #0066cc;
+    padding: 10px 20px;
+    font-size: 16px;
     color: white;
+    text-align: center;
     text-decoration: none;
     border-radius: 5px;
-    transition: background-color 0.3s;
-    text-align: center;
-    margin-right: 10px; /* Space between buttons */
-}
-
-.detail-btn:hover, .wifi-btn:hover {
-    background-color: #004a99;
-}
-
-
-
-
-
-/* Tabelle für Client-Details */
-.client-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.client-table th, .client-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.client-table th {
-    background-color: #f0f0f0;
-    font-weight: bold;
-}
-
-.client-table tr:hover {
-    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
 }
 
 /* Zurück-Button */
@@ -120,7 +88,7 @@ h1 {
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s;
-    margin-top: 20px;
+    margin-top: 20px; /* Added margin to create space above the button */
     text-align: center;
 }
 
@@ -128,29 +96,34 @@ h1 {
     background-color: #004a99;
 }
 
-/* Styling für den Löschen-Button */
+
+button:hover, .detail-btn:hover, .wifi-btn:hover, .back-link:hover, .delete-btn:hover {
+    opacity: 0.8; /* Slight hover effect for all buttons */
+}
+
+/* Button Colors */
+.detail-btn, .wifi-btn, .back-link {
+    background-color: #0066cc;
+}
+
+.detail-btn:hover, .wifi-btn:hover, .back-link:hover {
+    background-color: #004a99;
+}
+
 .delete-btn {
     background-color: #f44336;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 .delete-btn:hover {
     background-color: #d32f2f;
 }
 
-/* Styling for the Copy buttons with icons */
+/* Copy button icon */
 .copy-btn {
-    position: relative;
     background: none;
     border: none;
     cursor: pointer;
     padding: 5px;
-    overflow: hidden; /* Ensures ripple stays inside the button */
     vertical-align: middle;
 }
 
