@@ -119,3 +119,18 @@ h1 {
 .back-link:hover {
     background-color: #004a99;
 }
+
+/* Styling für den Löschen-Button */
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
