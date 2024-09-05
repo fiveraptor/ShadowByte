@@ -10,9 +10,9 @@ connection = mysql.connector.connect(
     database="system_info_db"
 )
 
-# Funktion, um alle gespeicherten WLAN-Profile auf macOS zu erhalten
+# Funktion, um nur WLAN-SSIDs aus dem Schlüsselbund zu extrahieren
 def get_wifi_info():
-    # Kommando zum Abrufen aller gespeicherten WLAN-Passwörter (erfordert sudo)
+    # Abrufen aller Einträge im Schlüsselbund
     command = ["security", "dump-keychain"]
     try:
         result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -22,25 +22,25 @@ def get_wifi_info():
         print(f"Fehler beim Ausführen des Befehls: {e}")
         return []
 
-    # SSIDs aus dem Schlüsselbund extrahieren
+    # Nur SSIDs extrahieren, die AirPort/WLAN-Netzwerke sind
     ssids = re.findall(r"\"acct\"<blob>=\"(.*?)\"", output)
     wifi_data = []
 
-    # Für jede SSID das zugehörige Passwort abrufen
     for ssid in ssids:
-        command = ["security", "find-generic-password", "-D", "AirPort network password", "-s", ssid, "-g"]
-        try:
-            # Passwort mit "security" aus dem Schlüsselbund extrahieren
-            password_result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            password_output = password_result.stderr
-            password_match = re.search(r"password: \"(.*?)\"", password_output)
-            password = password_match.group(1) if password_match else None
-            print(f"Passwort für '{ssid}' gefunden: {password}")
-        except Exception as e:
-            print(f"Fehler beim Abrufen des Passworts für {ssid}: {e}")
-            password = None
+        if "WLAN" in ssid or "wifi" in ssid.lower() or "SSID" in ssid:
+            # Passwort für die SSID abrufen
+            command = ["security", "find-generic-password", "-D", "AirPort network password", "-s", ssid, "-g"]
+            try:
+                password_result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                password_output = password_result.stderr
+                password_match = re.search(r"password: \"(.*?)\"", password_output)
+                password = password_match.group(1) if password_match else None
+                print(f"Passwort für '{ssid}' gefunden: {password}")
+            except Exception as e:
+                print(f"Fehler beim Abrufen des Passworts für {ssid}: {e}")
+                password = None
 
-        wifi_data.append((ssid, password))
+            wifi_data.append((ssid, password))
     
     return wifi_data
 
